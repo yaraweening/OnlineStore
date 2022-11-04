@@ -44,5 +44,20 @@ namespace OnlineStore
                 return new BadRequestObjectResult(ex.Message);
             }
         }
+
+        [Function("GetDepartments")]
+        [OpenApiOperation(operationId: "GetDepartments", tags: new[] { "Department" }, Description = "Get departments")]
+        [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(IEnumerable<Department>), Description = "The OK response with the departments.", Example = typeof(DepartmentExampleGenerator))]
+        public IActionResult GetDepartments([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "Departments")] HttpRequestData req)
+        {
+            try
+            {
+                return _departmentService.GetDepartments();
+            }
+            catch (Exception ex)
+            {
+                return new BadRequestObjectResult(ex.Message);
+            }
+        }
     }
 }

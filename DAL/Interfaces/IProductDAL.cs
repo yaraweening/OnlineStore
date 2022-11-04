@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using Models;
+﻿using Models;
 
 namespace DAL.Interfaces
 {
@@ -9,7 +8,7 @@ namespace DAL.Interfaces
         Product UploadImage(string productID, string image);
 
         string DownloadImage(string productID);
+        IEnumerable<Product> GetProducts();
         Product GetProductById(string productID);
-        Product UpdateProduct(string productID, Product product);
     }
 }

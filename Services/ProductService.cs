@@ -1,8 +1,6 @@
 ﻿using DAL.Interfaces;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
-using Microsoft.AspNetCore.StaticFiles;
 using Models;
 using Services.Interfaces;
 
@@ -37,14 +35,21 @@ namespace Services
             return result;
         }
 
-        public IActionResult GetProductById(string productID)
+        public IActionResult GetProducts()
         {
-            return (new ActionResult<Product>(_productDAL.GetProductById(productID)) as IConvertToActionResult).Convert();
+            var products = _productDAL.GetProducts().Select(p => new ProductDto
+            {
+                ProductID = p.ProductID,
+                Name = p.Name,
+                Description = p.Description,
+            });
+
+            return (new ActionResult<IEnumerable<ProductDto>>(products) as IConvertToActionResult).Convert();
         }
 
-        public IActionResult UpdateProduct(string productID, Product product)
+        public IActionResult GetProductById(string productID)
         {
-            return (new ActionResult<Product>(_productDAL.UpdateProduct(productID, product)) as IConvertToActionResult).Convert();
+            return (new ActionResult<ProductDto>(_productDAL.GetProductById(productID).ToProductDto()) as IConvertToActionResult).Convert();
         }
     }
 }

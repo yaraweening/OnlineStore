@@ -1,5 +1,4 @@
-﻿using DAL;
-using DAL.Interfaces;
+﻿using DAL.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Models;
@@ -30,6 +29,11 @@ namespace Services
             order = _orderDAL.CreateOrder(order);
 
             return order;
+        }
+
+        public IActionResult GetOrders()
+        {
+            return (new ActionResult<IEnumerable<Order>>(_orderDAL.GetOrders()) as IConvertToActionResult).Convert();
         }
 
         public IActionResult GetOrderById(string orderID)

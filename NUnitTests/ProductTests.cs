@@ -37,6 +37,21 @@
         }
 
         [Test]
+        public void Get_Products_Should_Return_All_Products()
+        {
+            //arrange
+            var dalMock = new Mock<IProductDAL>();
+            dalMock.Setup(x => x.GetProducts());
+
+            //act
+            var mockedDal = dalMock.Object;
+            var mockedProduct = mockedDal.GetProducts();
+
+            //assert
+            Assert.IsNotNull(mockedProduct);
+        }
+
+        [Test]
         public void Get_By_ProductID_Should_Return_One_Product()
         {
             //arrange

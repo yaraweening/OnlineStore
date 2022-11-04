@@ -8,7 +8,7 @@ namespace Models.ExampleGenerators
     {
         public override IOpenApiExample<Product> Build(NamingStrategy NamingStrategy = null)
         {
-            Examples.Add(OpenApiExampleResolver.Resolve("Order", instance: new Product()
+            Examples.Add(OpenApiExampleResolver.Resolve("Product", instance: new Product()
             {
                 ProductID = "Product-01",
                 Name = "MSI laptop",

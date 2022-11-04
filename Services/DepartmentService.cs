@@ -1,4 +1,6 @@
 ﻿using DAL.Interfaces;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Models;
 using Services.Interfaces;
 
@@ -24,6 +26,11 @@ namespace Services
             department = _departmentDAL.CreateDepartment(department);
 
             return department;
+        }
+
+        public IActionResult GetDepartments()
+        {
+            return (new ActionResult<IEnumerable<Department>>(_departmentDAL.GetDepartments()) as IConvertToActionResult).Convert();
         }
     }
 }

@@ -1,9 +1,9 @@
 using System.Net;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
 using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Attributes;
+using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Enums;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using Models;
@@ -66,14 +66,29 @@ namespace OnlineStore
         }
 
         [Function("DownloadImage")]
-        [OpenApiOperation(operationId: "DownloadImage", tags: new[] { "byte[]" }, Description = "Get specific product")]
+        [OpenApiOperation(operationId: "DownloadImage", tags: new[] { "Product" }, Description = "Get specific product", Visibility = OpenApiVisibilityType.Advanced)]
         [OpenApiParameter("ProductID", Description = "The product data.", Required = true, In = ParameterLocation.Path)]
-        [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "image/jpg", bodyType: typeof(byte[]), Description = "The OK response with the specific product.")]
+        [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "image/jpg", bodyType: typeof(FileContentResult), Description = "The OK response with the specific product.", Example = typeof(FileContentResult))]
         public IActionResult DownloadImage([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "ImageDownload/{ProductID}")] HttpRequestData req, string productID)
         {
             try
             {
                 return _productService.DownloadImage(productID);
+            }
+            catch (Exception ex)
+            {
+                return new BadRequestObjectResult(ex.Message);
+            }
+        }
+
+        [Function("GetProducts")]
+        [OpenApiOperation(operationId: "GetProducts", tags: new[] { "Product" }, Description = "Get products")]
+        [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(IEnumerable<Product>), Description = "The OK response with the products.", Example = typeof(ProductExampleGenerator))]
+        public IActionResult GetProducts([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "Products")] HttpRequestData req)
+        {
+            try
+            {
+                return _productService.GetProducts();
             }
             catch (Exception ex)
             {
@@ -90,23 +105,6 @@ namespace OnlineStore
             try
             {
                 return _productService.GetProductById(productID);
-            }
-            catch (Exception ex)
-            {
-                return new BadRequestObjectResult(ex.Message);
-            }
-        }
-
-        [Function("UpdateProduct")]
-        [OpenApiOperation(operationId: "UpdateProduct", tags: new[] { "Product" }, Description = "Update product")]
-        [OpenApiParameter("ProductID", Description = "The product data.", Required = true, In = ParameterLocation.Path)]
-        [OpenApiRequestBody("application/json", typeof(Product), Description = "The product data.", Example = typeof(ProductExampleGenerator))]
-        [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(Product), Description = "The OK response with the updated product.", Example = typeof(ProductExampleGenerator))]
-        public IActionResult UpdateProduct([HttpTrigger(AuthorizationLevel.Anonymous, "put", Route = "Product/{ProductID}")] HttpRequestData req, string productID, Product product)
-        {
-            try
-            {
-                return _productService.UpdateProduct(productID, product);
             }
             catch (Exception ex)
             {

@@ -17,12 +17,12 @@ public class Program
                 s.AddScoped<IProductDAL, ProductDAL>();
                 s.AddScoped<IOrderDAL, OrderDAL>();
                 s.AddScoped<IDepartmentDAL, DepartmentDAL>();
-                s.AddScoped<IForumDAL, ForumDAL>();
+                s.AddScoped<IReviewDAL, ReviewDAL>();
 
-                s.AddScoped<IOrderService, OrderService>();
                 s.AddScoped<IProductService, ProductService>();
+                s.AddScoped<IOrderService, OrderService>();
                 s.AddScoped<IDepartmentService, DepartmentService>();
-                s.AddScoped<IForumService, ForumService>();
+                s.AddScoped<IReviewService, ReviewService>();
             })
             .ConfigureOpenApi()
             .Build();

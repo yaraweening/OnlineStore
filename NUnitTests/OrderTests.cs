@@ -38,6 +38,21 @@ namespace NUnitTests
         }
 
         [Test]
+        public void Get_Orders_Should_Return_All_Orders()
+        {
+            //arrange
+            var dalMock = new Mock<IOrderDAL>();
+            dalMock.Setup(x => x.GetOrders());
+
+            //act
+            var mockedDal = dalMock.Object;
+            var mockedOrder = mockedDal.GetOrders();
+
+            //assert
+            Assert.IsNotNull(mockedOrder);
+        }
+
+        [Test]
         public void Get_By_OrderID_Should_Return_One_Order()
         {
             //arrange

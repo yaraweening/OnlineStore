@@ -34,6 +34,21 @@
             Assert.That(mockedDepartment.DepartmentID, Is.EqualTo(department.DepartmentID));
         }
 
+        [Test]
+        public void Get_Departments_Should_Return_All_Departments()
+        {
+            //arrange
+            var dalMock = new Mock<IDepartmentDAL>();
+            dalMock.Setup(x => x.GetDepartments());
+
+            //act
+            var mockedDal = dalMock.Object;
+            var mockedDepartment = mockedDal.GetDepartments();
+
+            //assert
+            Assert.IsNotNull(mockedDepartment);
+        }
+
         [TearDown]
         public void TestCleanUp()
         {

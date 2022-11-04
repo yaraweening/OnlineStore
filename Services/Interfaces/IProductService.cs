@@ -9,7 +9,7 @@ namespace Services.Interfaces
         IActionResult CreateProduct(ProductDto product);
         IActionResult UploadImage(string productID, string image);
         IActionResult DownloadImage(string productID);
+        IActionResult GetProducts();
         IActionResult GetProductById(string productID);
-        IActionResult UpdateProduct(string productID, Product product);
     }
 }

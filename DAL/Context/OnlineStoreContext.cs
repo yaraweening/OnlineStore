@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Models;
+
 namespace DAL.Context
 {
     public class OnlineStoreContext : DbContext
@@ -10,7 +11,7 @@ namespace DAL.Context
         {
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseSqlServer("Server=project-yara.database.windows.net;Database=OnlineStoreDB;User Id=yara-admin;Password=Y@r@.123@;");
+                optionsBuilder.UseSqlServer(QUERYSTRING);
             }
         }
 
@@ -21,6 +22,6 @@ namespace DAL.Context
         public DbSet<Product> Products { get; set; }
         public DbSet<Order> Orders { get; set; }
         public DbSet<Department> Departments { get; set; }
-        public DbSet<Forum> Forums { get; set; }
+        public DbSet<Review> Reviews { get; set; }
     }
 }

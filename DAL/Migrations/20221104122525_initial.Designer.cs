@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DAL.Migrations
 {
     [DbContext(typeof(OnlineStoreContext))]
-    [Migration("20221103163211_relations")]
-    partial class relations
+    [Migration("20221104122525_initial")]
+    partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -38,22 +38,6 @@ namespace DAL.Migrations
                     b.HasKey("DepartmentID");
 
                     b.ToTable("Departments");
-                });
-
-            modelBuilder.Entity("Models.Forum", b =>
-                {
-                    b.Property<string>("ForumID")
-                        .HasMaxLength(150)
-                        .HasColumnType("nvarchar(150)");
-
-                    b.Property<string>("Review")
-                        .IsRequired()
-                        .HasMaxLength(450)
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("ForumID");
-
-                    b.ToTable("Forums");
                 });
 
             modelBuilder.Entity("Models.Order", b =>
@@ -106,6 +90,27 @@ namespace DAL.Migrations
                     b.HasKey("ProductID");
 
                     b.ToTable("Products");
+                });
+
+            modelBuilder.Entity("Models.Review", b =>
+                {
+                    b.Property<string>("ReviewID")
+                        .HasMaxLength(150)
+                        .HasColumnType("nvarchar(150)");
+
+                    b.Property<string>("ProductID")
+                        .IsRequired()
+                        .HasMaxLength(150)
+                        .HasColumnType("nvarchar(150)");
+
+                    b.Property<string>("ReviewText")
+                        .IsRequired()
+                        .HasMaxLength(450)
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("ReviewID");
+
+                    b.ToTable("Reviews");
                 });
 #pragma warning restore 612, 618
         }

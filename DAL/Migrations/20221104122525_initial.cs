@@ -1,5 +1,4 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore.Migrations;
+﻿using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
@@ -19,18 +18,6 @@ namespace DAL.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Departments", x => x.DepartmentID);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Forums",
-                columns: table => new
-                {
-                    ForumID = table.Column<string>(type: "nvarchar(150)", maxLength: 150, nullable: false),
-                    Review = table.Column<string>(type: "nvarchar(450)", maxLength: 450, nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Forums", x => x.ForumID);
                 });
 
             migrationBuilder.CreateTable(
@@ -61,6 +48,19 @@ namespace DAL.Migrations
                 {
                     table.PrimaryKey("PK_Products", x => x.ProductID);
                 });
+
+            migrationBuilder.CreateTable(
+                name: "Reviews",
+                columns: table => new
+                {
+                    ReviewID = table.Column<string>(type: "nvarchar(150)", maxLength: 150, nullable: false),
+                    ProductID = table.Column<string>(type: "nvarchar(150)", maxLength: 150, nullable: false),
+                    ReviewText = table.Column<string>(type: "nvarchar(450)", maxLength: 450, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Reviews", x => x.ReviewID);
+                });
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -69,13 +69,13 @@ namespace DAL.Migrations
                 name: "Departments");
 
             migrationBuilder.DropTable(
-                name: "Forums");
-
-            migrationBuilder.DropTable(
                 name: "Orders");
 
             migrationBuilder.DropTable(
                 name: "Products");
+
+            migrationBuilder.DropTable(
+                name: "Reviews");
         }
     }
 }

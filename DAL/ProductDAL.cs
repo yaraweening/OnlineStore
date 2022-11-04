@@ -1,7 +1,5 @@
 using DAL.Context;
 using DAL.Interfaces;
-using Microsoft.AspNetCore.Http;
-using Microsoft.EntityFrameworkCore;
 using Models;
 
 namespace DAL
@@ -12,6 +10,11 @@ namespace DAL
         {
             using (var context = new OnlineStoreContext())
             {
+                if (ProductExists(product.ProductID))
+                {
+                    throw new Exception("This product id already exists");
+                }
+
                 context.Add(product);
                 context.SaveChanges();
                 return product;
@@ -22,6 +25,11 @@ namespace DAL
         {
             using (var context = new OnlineStoreContext())
             {
+                if (!ProductExists(productID))
+                {
+                    throw new Exception("This product does not exist");
+                }
+
                 Product product = context.Products.FirstOrDefault(p => p.ProductID.Equals(productID));
 
                 if (product != null)
@@ -39,6 +47,11 @@ namespace DAL
         {
             using (var context = new OnlineStoreContext())
             {
+                if (!ProductExists(productID))
+                {
+                    throw new Exception("This product does not exist");
+                }
+
                 Product product = context.Products.FirstOrDefault(p => p.ProductID.Equals(productID));
 
                 if (product != null)
@@ -50,46 +63,45 @@ namespace DAL
             }
         }
 
-        public Product GetProductById(string productID)
+        public IEnumerable<Product> GetProducts()
         {
-            try
+            using (var context = new OnlineStoreContext())
             {
-                using (var context = new OnlineStoreContext())
-                {
-                    Product product = context.Products
-                        .Where(p => p.ProductID.Equals(productID))
-                        .Select(o => new Product
-                        {
-                            ProductID = o.ProductID,
-                            Name = o.Name,
-                            Description = o.Description
-                        }).First();
-
-                    return product;
-                }
-            }
-            catch (Exception ex)
-            {
-                var mess = ex.Message;
+                return context.Products.ToList();
             }
 
             return null;
         }
 
-        public Product UpdateProduct(string productID, Product product)
+        public Product GetProductById(string productID)
         {
             using (var context = new OnlineStoreContext())
             {
-                product = context.Products.FirstOrDefault(p => p.ProductID.Equals(productID));
-
-                if (product != null)
+                if (!ProductExists(productID))
                 {
-                    context.Entry(product).State = EntityState.Modified;
-                    context.SaveChanges();
-                    return product;
+                    throw new Exception("This product does not exist");
                 }
 
-                return null;
+                Product product = context.Products
+                    .Where(p => p.ProductID.Equals(productID))
+                    .Select(o => new Product
+                    {
+                        ProductID = o.ProductID,
+                        Name = o.Name,
+                        Description = o.Description
+                    }).First();
+
+                return product;
+            }
+
+            return null;
+        }
+
+        private static bool ProductExists(string productID)
+        {
+            using (var context = new OnlineStoreContext())
+            {
+                return context.Products.Any(e => e.ProductID == productID);
             }
         }
     }

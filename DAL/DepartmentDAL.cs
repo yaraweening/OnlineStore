@@ -10,9 +10,32 @@ namespace DAL
         {
             using (var context = new OnlineStoreContext())
             {
+                if (DepartmentExists(department.DepartmentID))
+                {
+                    throw new Exception("This department id already exists");
+                }
+
                 context.Add(department);
                 context.SaveChanges();
                 return department;
+            }
+        }
+
+        public IEnumerable<Department> GetDepartments()
+        {
+            using (var context = new OnlineStoreContext())
+            {
+                return context.Departments.ToList();
+            }
+
+            return null;
+        }
+
+        private static bool DepartmentExists(string departmentID)
+        {
+            using (var context = new OnlineStoreContext())
+            {
+                return context.Departments.Any(e => e.DepartmentID == departmentID);
             }
         }
     }
